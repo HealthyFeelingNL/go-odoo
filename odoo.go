@@ -1,4 +1,5 @@
-//Package odoo contains client code of library
+// Package odoo contains client code of library
+//
 //go:generate ./generator/generator -u $ODOO_ADMIN -p $ODOO_PASSWORD -d $ODOO_DATABASE --url $ODOO_URL -o $ODOO_REPO_PATH --models $ODOO_MODELS
 package odoo
 
@@ -193,6 +194,17 @@ func (o *Options) AllFields(fields ...string) *Options {
 		ff = append(ff, f)
 	}
 	return o.Add("allfields", ff)
+}
+
+// SetFields is useful for FieldsGet function. It represents the fields to document
+// you want odoo to return.
+// https://www.odoo.com/documentation/13.0/reference/orm.html#fields-views
+func (o *Options) SetFields(fields []string) *Options {
+	ff := []string{}
+	for _, f := range fields {
+		ff = append(ff, f)
+	}
+	return o.Add("fields", ff)
 }
 
 // Attributes is useful for FieldsGet function. It represents the attributes to document

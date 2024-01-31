@@ -1,4 +1,4 @@
-module github.com/HealthyFeelingNL/go-odoo
+module github.com/skilld-labs/go-odoo
 
 go 1.18
 

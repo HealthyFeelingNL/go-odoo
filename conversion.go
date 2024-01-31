@@ -112,11 +112,19 @@ func convertFromDynamicToStaticValue(staticType reflect.Type, dynamicValue inter
 		case "String":
 			staticValue = NewString(dynamicValue.(string))
 		case "Int":
-			staticValue = NewInt(dynamicValue.(int64))
+			if val, ok := dynamicValue.(int64); ok {
+				staticValue = NewInt(val)
+			} else if val, ok := dynamicValue.(float64); ok {
+				staticValue = NewInt(int64(val))
+			}
 		case "Selection":
 			staticValue = NewSelection(dynamicValue)
 		case "Float":
-			staticValue = NewFloat(dynamicValue.(float64))
+			if val, ok := dynamicValue.(float64); ok {
+				staticValue = NewFloat(val)
+			} else if val, ok := dynamicValue.(int64); ok {
+				staticValue = NewFloat(float64(val))
+			}
 		case "Time":
 			format := dateFormat
 			if len(dynamicValue.(string)) > 10 {

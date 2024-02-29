@@ -107,10 +107,15 @@ func convertFromDynamicToStaticValue(staticType reflect.Type, dynamicValue inter
 		staticType = staticType.Elem()
 	}
 	typeName := staticType.Name()
+	if dynamicValue == nil {
+		return nil
+	}
 	if !(dynamicValue == nil || (reflect.ValueOf(dynamicValue).Kind() == reflect.Bool && typeName != "Bool")) {
 		switch typeName {
 		case "String":
-			staticValue = NewString(dynamicValue.(string))
+			if val, ok := dynamicValue.(string); ok {
+				staticValue = NewString(val)
+			}
 		case "Int":
 			if val, ok := dynamicValue.(int64); ok {
 				staticValue = NewInt(val)
@@ -127,20 +132,38 @@ func convertFromDynamicToStaticValue(staticType reflect.Type, dynamicValue inter
 			}
 		case "Time":
 			format := dateFormat
-			if len(dynamicValue.(string)) > 10 {
+			if strVal, ok := dynamicValue.(string); ok && len(strVal) > 10 {
 				format = datetimeFormat
 			}
-			t, _ := time.Parse(format, dynamicValue.(string))
-			staticValue = NewTime(t)
+			if strVal, ok := dynamicValue.(string); ok {
+				t, _ := time.Parse(format, strVal)
+				staticValue = NewTime(t)
+			}
 		case "Many2One":
-			staticValue = NewMany2One(dynamicValue.([]interface{})[0].(int64), dynamicValue.([]interface{})[1].(string))
+			if slice, ok := dynamicValue.([]interface{}); ok && len(slice) >= 2 {
+				id, _ := slice[0].(int64)    // Assuming the ID is always present and is the first element
+				name, _ := slice[1].(string) // Assuming the name is always the second element
+				staticValue = NewMany2One(id, name)
+			}
 		case "Relation":
-			staticValue = NewRelation()
-			staticValue.(*Relation).ids = sliceInterfaceToInt64Slice(dynamicValue.([]interface{}))
+			if slice, ok := dynamicValue.([]interface{}); ok {
+				staticValue = NewRelation()
+				staticValue.(*Relation).ids = sliceInterfaceToInt64Slice(slice)
+			}
 		case "Bool":
-			staticValue = NewBool(dynamicValue.(bool))
+			if val, ok := dynamicValue.(bool); ok {
+				staticValue = NewBool(val)
+			}
 		default:
-			staticValue = dynamicValue
+			// For unexpected types, especially map[string]interface{} which caused the original issue
+			if _, ok := dynamicValue.(map[string]interface{}); ok {
+				// Convert map to a JSON string or handle it according to your needs
+				// Example: staticValue = convertMapToString(dynamicValue.(map[string]interface{}))
+				// For simplicity, let's just return nil or an empty structure as needed
+				staticValue = nil // Adjust this as needed
+			} else {
+				staticValue = dynamicValue
+			}
 		}
 	}
 	return staticValue

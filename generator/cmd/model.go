@@ -24,6 +24,7 @@ var odooToType = map[string]string{
 	"binary":             "*String",
 	"html":               "*String",
 	"reference":          "*String",
+	"json":               "*String",
 }
 
 type model struct {

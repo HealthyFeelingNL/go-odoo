@@ -102,6 +102,7 @@ func convertFromDynamicToStaticOne(dynamic map[string]interface{}, oneModel refl
 }
 
 func convertFromDynamicToStaticValue(staticType reflect.Type, dynamicValue interface{}) interface{} {
+
 	var staticValue interface{}
 	if staticType.Kind() == reflect.Ptr {
 		staticType = staticType.Elem()

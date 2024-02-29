@@ -6,7 +6,6 @@ import (
 
 // IrActionsActWindowView represents ir.actions.act_window.view model.
 type IrActionsActWindowView struct {
-	LastUpdate  *Time      `xmlrpc:"__last_update,omptempty"`
 	ActWindowId *Many2One  `xmlrpc:"act_window_id,omptempty"`
 	CreateDate  *Time      `xmlrpc:"create_date,omptempty"`
 	CreateUid   *Many2One  `xmlrpc:"create_uid,omptempty"`

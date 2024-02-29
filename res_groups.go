@@ -6,7 +6,6 @@ import (
 
 // ResGroups represents res.groups model.
 type ResGroups struct {
-	LastUpdate      *Time     `xmlrpc:"__last_update,omptempty"`
 	CategoryId      *Many2One `xmlrpc:"category_id,omptempty"`
 	Color           *Int      `xmlrpc:"color,omptempty"`
 	Comment         *String   `xmlrpc:"comment,omptempty"`
@@ -16,7 +15,6 @@ type ResGroups struct {
 	FullName        *String   `xmlrpc:"full_name,omptempty"`
 	Id              *Int      `xmlrpc:"id,omptempty"`
 	ImpliedIds      *Relation `xmlrpc:"implied_ids,omptempty"`
-	IsPortal        *Bool     `xmlrpc:"is_portal,omptempty"`
 	MenuAccess      *Relation `xmlrpc:"menu_access,omptempty"`
 	ModelAccess     *Relation `xmlrpc:"model_access,omptempty"`
 	Name            *String   `xmlrpc:"name,omptempty"`

@@ -25,3 +25,7 @@
 .vscode/
 .DS_Store
 .env
+
+# Local development
+compose-dev.yaml
+set_odoo_env.sh
